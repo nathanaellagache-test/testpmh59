@@ -1004,10 +1004,11 @@
                 const heureIndex = findColumnIndex(headers, ['heure de passage', 'heure']);
                 const lieuIndex = findColumnIndex(headers, ['quel lieu avez-vous sécurisé', 'lieu']);
                 const faitIndex = findColumnIndex(headers, ['avez-vous constaté un fait', 'fait']);
-                const agentIndex = findColumnIndex(headers, ['matricule agent', 'agent', 'n° de main courante']);
-                const evenementIndex = findColumnIndex(headers, ['quel fait avez-vous constaté', 'quel fait avez-vous constaté ?']);
+                const mainCouranteIndex = findColumnIndex(headers, ['n° de main courante', 'main courante']);
+                const evenementIndex = findColumnIndex(headers, ['quel fait avez-vous constaté', 'fait avez-vous constaté']);
+                const agentIndex = findColumnIndex(headers, ['matricule agent', 'agent']);
                 
-                console.log('Index trouvés - Date:', dateIndex, 'Heure:', heureIndex, 'Lieu:', lieuIndex, 'Fait:', faitIndex, 'Agent:', agentIndex, 'Événement:', evenementIndex);
+                console.log('Index trouvés - Date:', dateIndex, 'Heure:', heureIndex, 'Lieu:', lieuIndex, 'Fait:', faitIndex, 'MainCourante:', mainCouranteIndex, 'Événement:', evenementIndex, 'Agent:', agentIndex);
                 
                 // Vérifier que les colonnes essentielles sont trouvées
                 if (dateIndex === -1 || lieuIndex === -1) {
