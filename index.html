@@ -834,8 +834,12 @@
                     <div class="filters">
                         <div class="filters-grid">
                             <div class="filter-group">
-                                <label class="filter-label">Date</label>
-                                <input type="date" class="filter-select" id="filterDate">
+                                <label class="filter-label">Date début</label>
+                                <input type="date" class="filter-select" id="filterDateStart">
+                            </div>
+                            <div class="filter-group">
+                                <label class="filter-label">Date fin</label>
+                                <input type="date" class="filter-select" id="filterDateEnd">
                             </div>
                             <div class="filter-group">
                                 <label class="filter-label">Lieu</label>
@@ -1212,6 +1216,22 @@
                 tabContent.className = 'tab-content';
                 tabContent.id = `secteur-${index}`;
                 tabContent.innerHTML = `
+                    <div class="filters">
+                        <div class="filters-grid">
+                            <div class="filter-group">
+                                <label class="filter-label">Date début</label>
+                                <input type="date" class="filter-select" id="filterDateStart-${index}">
+                            </div>
+                            <div class="filter-group">
+                                <label class="filter-label">Date fin</label>
+                                <input type="date" class="filter-select" id="filterDateEnd-${index}">
+                            </div>
+                        </div>
+                        <div class="filter-actions">
+                            <button class="btn btn-primary" onclick="applySectorFilters('secteur-${index}', '${location}')">🔍 Filtrer</button>
+                            <button class="btn btn-secondary" onclick="resetSectorFilters('secteur-${index}', '${location}')">🔄 Réinitialiser</button>
+                        </div>
+                    </div>
                     <div class="stats-grid" id="stats-secteur-${index}"></div>
                     <div class="chart-container">
                         <h3 class="chart-title">📊 Répartition des incidents - ${location}</h3>
@@ -1226,6 +1246,12 @@
                 // Insérer avant l'onglet "Données Complètes"
                 const donneesContent = document.getElementById('donnees');
                 donneesContent.parentNode.insertBefore(tabContent, donneesContent);
+                
+                // Ajouter les event listeners pour les filtres de date
+                setTimeout(() => {
+                    document.getElementById(`filterDateStart-${index}`).addEventListener('change', () => applySectorFilters(`secteur-${index}`, location));
+                    document.getElementById(`filterDateEnd-${index}`).addEventListener('change', () => applySectorFilters(`secteur-${index}`, location));
+                }, 100);
             });
         }
 
@@ -1237,11 +1263,28 @@
                 location = allLocations[sectorIndex];
             }
             
-            // Filtrer les données pour ce lieu spécifique
-            const sectorData = allData.filter(row => row.lieu === location);
+            // Récupérer les filtres de date pour ce secteur
+            const sectorIndex = sectorId.split('-')[1];
+            const dateStartFilter = document.getElementById(`filterDateStart-${sectorIndex}`)?.value || '';
+            const dateEndFilter = document.getElementById(`filterDateEnd-${sectorIndex}`)?.value || '';
+            
+            // Filtrer les données pour ce lieu spécifique avec la plage de dates
+            let sectorData = allData.filter(row => row.lieu === location);
+            
+            // Appliquer le filtre de dates si présent
+            if (dateStartFilter || dateEndFilter) {
+                sectorData = sectorData.filter(row => {
+                    const normalizedRowDate = normalizeDate(row.date);
+                    if (dateStartFilter && normalizedRowDate < dateStartFilter) return false;
+                    if (dateEndFilter && normalizedRowDate > dateEndFilter) return false;
+                    return true;
+                });
+            }
 
             if (sectorData.length === 0) {
-                document.getElementById(`stats-${sectorId}`).innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--text-secondary);">Aucune donnée pour ce secteur</p>';
+                document.getElementById(`stats-${sectorId}`).innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--text-secondary);">Aucune donnée pour cette période</p>';
+                document.getElementById(`chart-${sectorId}`).innerHTML = '<p style="text-align: center; color: var(--text-secondary);">Aucune donnée disponible</p>';
+                document.getElementById(`time-chart-${sectorId}`).innerHTML = '<p style="text-align: center; color: var(--text-secondary);">Aucune donnée disponible</p>';
                 return;
             }
 
@@ -1275,6 +1318,19 @@
 
             // Graphique horaire
             updateSectorTimeChart(sectorId, sectorData);
+        }
+
+        // Appliquer les filtres pour un secteur spécifique
+        function applySectorFilters(sectorId, location) {
+            updateSectorStats(sectorId, location);
+        }
+
+        // Réinitialiser les filtres pour un secteur spécifique
+        function resetSectorFilters(sectorId, location) {
+            const sectorIndex = sectorId.split('-')[1];
+            document.getElementById(`filterDateStart-${sectorIndex}`).value = '';
+            document.getElementById(`filterDateEnd-${sectorIndex}`).value = '';
+            updateSectorStats(sectorId, location);
         }
 
         function updateSectorStatusChart(sectorId, data) {
@@ -1355,22 +1411,60 @@
         }
 
         function applyFilters() {
-            const dateFilter = document.getElementById('filterDate').value;
+            const dateStartFilter = document.getElementById('filterDateStart').value;
+            const dateEndFilter = document.getElementById('filterDateEnd').value;
             const locationFilter = document.getElementById('filterLocation').value;
             const statusFilter = document.getElementById('filterStatus').value;
 
             filteredData = allData.filter(row => {
-                if (dateFilter && row.date !== dateFilter) return false;
+                // Filtrage par plage de dates
+                if (dateStartFilter || dateEndFilter) {
+                    const rowDate = row.date;
+                    
+                    // Convertir les dates au format comparable (YYYY-MM-DD)
+                    const normalizedRowDate = normalizeDate(rowDate);
+                    
+                    if (dateStartFilter && normalizedRowDate < dateStartFilter) return false;
+                    if (dateEndFilter && normalizedRowDate > dateEndFilter) return false;
+                }
+                
+                // Filtrage par lieu
                 if (locationFilter && row.lieu !== locationFilter) return false;
+                
+                // Filtrage par statut
                 if (statusFilter && row.fait.toLowerCase() !== statusFilter) return false;
+                
                 return true;
             });
 
             updateDashboard();
         }
 
+        // Normaliser le format de date pour la comparaison
+        function normalizeDate(dateStr) {
+            // Si la date est déjà au format YYYY-MM-DD
+            if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+                return dateStr;
+            }
+            
+            // Si la date est au format DD/MM/YYYY
+            if (/^\d{2}\/\d{2}\/\d{4}$/.test(dateStr)) {
+                const [day, month, year] = dateStr.split('/');
+                return `${year}-${month}-${day}`;
+            }
+            
+            // Si la date est au format DD-MM-YYYY
+            if (/^\d{2}-\d{2}-\d{4}$/.test(dateStr)) {
+                const [day, month, year] = dateStr.split('-');
+                return `${year}-${month}-${day}`;
+            }
+            
+            return dateStr;
+        }
+
         function resetFilters() {
-            document.getElementById('filterDate').value = '';
+            document.getElementById('filterDateStart').value = '';
+            document.getElementById('filterDateEnd').value = '';
             document.getElementById('filterLocation').value = '';
             document.getElementById('filterStatus').value = '';
             filteredData = [...allData];
@@ -1384,7 +1478,8 @@
         }
 
         // Événements des filtres
-        document.getElementById('filterDate').addEventListener('change', applyFilters);
+        document.getElementById('filterDateStart').addEventListener('change', applyFilters);
+        document.getElementById('filterDateEnd').addEventListener('change', applyFilters);
         document.getElementById('filterLocation').addEventListener('change', applyFilters);
         document.getElementById('filterStatus').addEventListener('change', applyFilters);
 
