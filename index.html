@@ -882,7 +882,7 @@
                                         <th>🕐 Heure</th>
                                         <th>📍 Lieu</th>
                                         <th>⚠️ Statut</th>
-                                        <th>👮 Agent</th>
+                                        <th>📝 Événement</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tableBody"></tbody>
@@ -1005,8 +1005,9 @@
                 const lieuIndex = findColumnIndex(headers, ['lieu', 'location', 'place', 'secteur', 'zone']);
                 const faitIndex = findColumnIndex(headers, ['fait', 'incident', 'statut', 'status']);
                 const agentIndex = findColumnIndex(headers, ['agent', 'matricule', 'numéro', 'numero', 'number']);
+                const evenementIndex = findColumnIndex(headers, ['quel fait avez-vous constaté', 'constaté', 'événement', 'evenement', 'description', 'fait constaté']);
                 
-                console.log('Index trouvés - Date:', dateIndex, 'Heure:', heureIndex, 'Lieu:', lieuIndex, 'Fait:', faitIndex, 'Agent:', agentIndex);
+                console.log('Index trouvés - Date:', dateIndex, 'Heure:', heureIndex, 'Lieu:', lieuIndex, 'Fait:', faitIndex, 'Agent:', agentIndex, 'Événement:', evenementIndex);
                 
                 // Vérifier que les colonnes essentielles sont trouvées
                 if (dateIndex === -1 || lieuIndex === -1) {
@@ -1037,7 +1038,8 @@
                                 heure: heureIndex !== -1 ? (values[heureIndex]?.replace(/"/g, '') || '') : '',
                                 lieu: lieuValue,
                                 fait: faitIndex !== -1 ? (values[faitIndex]?.replace(/"/g, '') || 'non') : 'non',
-                                agent: agentIndex !== -1 ? (values[agentIndex]?.replace(/"/g, '') || '') : ''
+                                agent: agentIndex !== -1 ? (values[agentIndex]?.replace(/"/g, '') || '') : '',
+                                evenement: evenementIndex !== -1 ? (values[evenementIndex]?.replace(/"/g, '') || '') : ''
                             });
                         }
                     }
@@ -1129,7 +1131,7 @@
                             ? '<span class="badge badge-danger">⚠️ Incident</span>' 
                             : '<span class="badge badge-success">✓ RAS</span>'}
                     </td>
-                    <td>#${row.agent}</td>
+                    <td>${row.evenement || '-'}</td>
                 </tr>
             `).join('');
 
