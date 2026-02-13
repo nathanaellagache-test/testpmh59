@@ -187,28 +187,34 @@
             margin: 0 auto;
         }
 
+        /* Header responsive */
         header {
             background: var(--bg-card);
-            padding: 24px 32px;
+            padding: 20px;
             border-radius: 16px;
             box-shadow: var(--shadow);
             margin-bottom: 24px;
             border-left: 4px solid var(--primary);
+        }
+
+        .header-wrapper {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
         }
 
         .header-content h1 {
-            font-size: 28px;
+            font-size: clamp(20px, 5vw, 28px);
             font-weight: 700;
             color: var(--text-primary);
-            margin-bottom: 8px;
+            margin-bottom: 4px;
         }
 
         .subtitle {
             color: var(--text-secondary);
-            font-size: 14px;
+            font-size: clamp(12px, 3vw, 14px);
         }
 
         .logout-btn {
@@ -222,6 +228,7 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s ease;
+            white-space: nowrap;
         }
 
         .logout-btn:hover {
@@ -229,19 +236,99 @@
             transform: translateY(-1px);
         }
 
+        /* SYSTÈME D'ONGLETS */
+        .tabs-container {
+            background: var(--bg-card);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            margin-bottom: 24px;
+            overflow: hidden;
+        }
+
+        .tabs-header {
+            display: flex;
+            overflow-x: auto;
+            overflow-y: hidden;
+            border-bottom: 2px solid var(--border);
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+        }
+
+        .tabs-header::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .tabs-header::-webkit-scrollbar-track {
+            background: var(--bg-main);
+        }
+
+        .tabs-header::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        .tab-btn {
+            flex: 0 0 auto;
+            padding: 16px 24px;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .tab-btn:hover {
+            color: var(--primary);
+            background: var(--bg-main);
+        }
+
+        .tab-btn.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+            background: var(--bg-main);
+        }
+
+        .tab-content {
+            display: none;
+            padding: 24px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Grille de statistiques responsive */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
             margin-bottom: 24px;
         }
 
         .stat-card {
             background: var(--bg-card);
-            padding: 24px;
+            padding: 20px;
             border-radius: 12px;
             box-shadow: var(--shadow);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            border-left: 4px solid var(--primary);
+            transition: all 0.2s ease;
         }
 
         .stat-card:hover {
@@ -250,131 +337,202 @@
         }
 
         .stat-label {
-            font-size: 13px;
+            font-size: 12px;
+            color: var(--text-secondary);
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            color: var(--text-secondary);
-            font-weight: 500;
+            font-weight: 600;
             margin-bottom: 8px;
         }
 
         .stat-value {
-            font-size: 36px;
-            font-weight: 700;
             font-family: 'JetBrains Mono', monospace;
+            font-size: clamp(24px, 5vw, 36px);
+            font-weight: 700;
             color: var(--text-primary);
         }
 
-        .stat-change {
-            font-size: 12px;
-            margin-top: 8px;
-            color: var(--text-secondary);
+        .stat-card.success {
+            border-left-color: var(--success);
         }
 
-        .alert-box {
-            background: linear-gradient(135deg, #FF3B30 0%, #FF6B5A 100%);
-            color: white;
+        .stat-card.warning {
+            border-left-color: var(--warning);
+        }
+
+        .stat-card.danger {
+            border-left-color: var(--danger);
+        }
+
+        /* Graphiques responsive */
+        .chart-container {
+            background: var(--bg-card);
             padding: 24px;
             border-radius: 12px;
+            box-shadow: var(--shadow);
             margin-bottom: 24px;
-            box-shadow: 0 4px 20px rgba(255, 59, 48, 0.2);
+        }
+
+        .chart-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+
+        .bar-item {
+            margin-bottom: 16px;
+        }
+
+        .bar-label {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--text-primary);
+        }
+
+        .bar-wrapper {
+            background: var(--bg-main);
+            border-radius: 8px;
+            height: 32px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--success) 0%, #00A876 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding: 0 12px;
+            color: white;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            font-weight: 600;
+            transition: width 0.5s ease;
+            min-width: 40px;
+        }
+
+        .bar-fill.danger {
+            background: linear-gradient(90deg, var(--danger) 0%, #CC3028 100%);
+        }
+
+        /* Alerte responsive */
+        .alert-box {
+            background: linear-gradient(135deg, #FFF4E6 0%, #FFE8CC 100%);
+            border: 2px solid var(--warning);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
         }
 
         .alert-box h2 {
-            font-size: 18px;
-            margin-bottom: 12px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 12px;
+            font-size: clamp(16px, 4vw, 18px);
+            font-weight: 700;
+            color: #B45309;
+            margin-bottom: 16px;
         }
 
         .alert-icon {
-            width: 24px;
-            height: 24px;
-            background: white;
+            width: 32px;
+            height: 32px;
+            background: var(--warning);
+            color: white;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 700;
-            color: #FF3B30;
+            flex-shrink: 0;
         }
 
         .priority-list {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 12px;
         }
 
         .priority-item {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            padding: 12px 16px;
-            border-radius: 8px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            background: white;
+            padding: 12px 16px;
+            border-radius: 8px;
+            gap: 12px;
+            flex-wrap: wrap;
         }
 
         .priority-rank {
+            background: var(--warning);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 6px;
             font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
             font-weight: 700;
-            font-size: 18px;
-            margin-right: 12px;
+            margin-right: 8px;
         }
 
+        /* Filtres responsive */
         .filters {
             background: var(--bg-card);
-            padding: 20px 24px;
+            padding: 20px;
             border-radius: 12px;
             box-shadow: var(--shadow);
             margin-bottom: 24px;
-            display: flex;
-            flex-wrap: wrap;
+        }
+
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 16px;
-            align-items: center;
+            margin-bottom: 16px;
         }
 
         .filter-group {
             display: flex;
             flex-direction: column;
-            gap: 6px;
         }
 
         .filter-label {
             font-size: 12px;
-            font-weight: 500;
-            color: var(--text-secondary);
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 6px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
-        select, input[type="date"] {
-            padding: 10px 14px;
-            border: 1px solid var(--border);
+        .filter-select {
+            padding: 10px 12px;
+            border: 2px solid var(--border);
             border-radius: 8px;
             font-family: 'DM Sans', sans-serif;
             font-size: 14px;
-            background: var(--bg-card);
-            color: var(--text-primary);
+            background: var(--bg-main);
             cursor: pointer;
-            transition: border-color 0.2s ease;
+            transition: all 0.2s ease;
         }
 
-        select:hover, input[type="date"]:hover {
-            border-color: var(--primary);
-        }
-
-        select:focus, input[type="date"]:focus {
+        .filter-select:focus {
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.1);
         }
 
+        .filter-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
         .btn {
             padding: 10px 20px;
-            background: var(--primary);
-            color: white;
             border: none;
             border-radius: 8px;
             font-family: 'DM Sans', sans-serif;
@@ -384,68 +542,79 @@
             transition: all 0.2s ease;
         }
 
-        .btn:hover {
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
             background: #0052CC;
             transform: translateY(-1px);
         }
 
-        .btn:active {
-            transform: translateY(0);
+        .btn-secondary {
+            background: var(--bg-main);
+            color: var(--text-primary);
+            border: 2px solid var(--border);
         }
 
-        .data-table {
-            background: var(--bg-card);
+        .btn-secondary:hover {
+            background: var(--border);
+        }
+
+        /* Tableau responsive */
+        .table-wrapper {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
             border-radius: 12px;
             box-shadow: var(--shadow);
-            overflow: hidden;
             margin-bottom: 24px;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
+            background: var(--bg-card);
+            min-width: 600px;
         }
 
         thead {
             background: var(--bg-main);
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
 
         th {
-            padding: 16px 20px;
+            padding: 16px;
             text-align: left;
             font-size: 12px;
-            font-weight: 600;
+            font-weight: 700;
+            color: var(--text-secondary);
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            color: var(--text-secondary);
-        }
-
-        tbody tr {
-            border-bottom: 1px solid var(--border);
-            transition: background 0.15s ease;
-        }
-
-        tbody tr:hover {
-            background: var(--bg-main);
-        }
-
-        tbody tr:last-child {
-            border-bottom: none;
+            border-bottom: 2px solid var(--border);
         }
 
         td {
-            padding: 16px 20px;
+            padding: 16px;
             font-size: 14px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        tr:hover {
+            background: var(--bg-main);
         }
 
         .badge {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 12px;
+            border-radius: 20px;
             font-size: 12px;
             font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
+            white-space: nowrap;
         }
 
         .badge-success {
@@ -458,247 +627,264 @@
             color: #991B1B;
         }
 
+        /* États de chargement */
         .loading {
             text-align: center;
             padding: 60px 20px;
-            color: var(--text-secondary);
         }
 
         .spinner {
             width: 40px;
             height: 40px;
-            border: 3px solid var(--border);
+            border: 4px solid var(--border);
             border-top-color: var(--primary);
             border-radius: 50%;
-            animation: spin 0.8s linear infinite;
             margin: 0 auto 16px;
+            animation: spin 0.8s linear infinite;
         }
 
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
 
-        .chart-container {
-            background: var(--bg-card);
-            padding: 24px;
-            border-radius: 12px;
-            box-shadow: var(--shadow);
-            margin-bottom: 24px;
-        }
-
-        .chart-title {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 20px;
-            color: var(--text-primary);
-        }
-
-        .bar-chart {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .bar-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .bar-label {
-            min-width: 120px;
-            font-size: 13px;
-            color: var(--text-secondary);
-        }
-
-        .bar-wrapper {
-            flex: 1;
-            background: var(--bg-main);
-            border-radius: 6px;
-            height: 32px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .bar-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary) 0%, #0052CC 100%);
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            padding-right: 10px;
-            color: white;
-            font-size: 12px;
-            font-weight: 600;
-            font-family: 'JetBrains Mono', monospace;
-            transition: width 0.6s ease;
-        }
-
-        .bar-fill.danger {
-            background: linear-gradient(90deg, var(--danger) 0%, #CC3028 100%);
-        }
-
         .empty-state {
             text-align: center;
             padding: 60px 20px;
-            color: var(--text-secondary);
+            display: none;
         }
 
-        .empty-state svg {
-            width: 80px;
-            height: 80px;
+        .empty-state-icon {
+            font-size: 64px;
             margin-bottom: 16px;
-            opacity: 0.3;
+            opacity: 0.5;
         }
 
+        .empty-state h3 {
+            font-size: 18px;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .empty-state p {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        /* MEDIA QUERIES */
         @media (max-width: 768px) {
+            body {
+                padding: 12px;
+            }
+
+            header {
+                padding: 16px;
+            }
+
+            .header-wrapper {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .logout-btn {
+                width: 100%;
+            }
+
+            .tabs-container {
+                margin-left: -12px;
+                margin-right: -12px;
+                border-radius: 0;
+            }
+
+            .tab-content {
+                padding: 16px;
+            }
+
             .stats-grid {
                 grid-template-columns: 1fr;
             }
 
-            .filters {
-                flex-direction: column;
-                align-items: stretch;
+            .chart-container {
+                padding: 16px;
             }
 
-            header {
+            .filters {
+                padding: 16px;
+            }
+
+            .filters-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-actions {
                 flex-direction: column;
-                gap: 16px;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .login-box {
+                padding: 32px 24px;
+            }
+
+            .priority-item {
+                flex-direction: column;
                 align-items: flex-start;
             }
+        }
 
-            table {
-                font-size: 12px;
+        @media (max-width: 480px) {
+            .tab-btn {
+                padding: 12px 16px;
+                font-size: 13px;
             }
 
             th, td {
-                padding: 12px 10px;
+                padding: 12px 8px;
+                font-size: 12px;
+            }
+
+            .stat-card {
+                padding: 16px;
+            }
+
+            .alert-box {
+                padding: 16px;
             }
         }
     </style>
 </head>
 <body>
     <!-- PAGE DE CONNEXION -->
-    <div id="loginPage" class="login-container">
+    <div class="login-container" id="loginPage">
         <div class="login-box">
             <div class="login-header">
-                <div class="login-icon">🔒</div>
-                <h2 class="login-title">Accès Sécurisé</h2>
-                <p class="login-subtitle">Tableau de Bord des Patrouilles</p>
-            </div>
-            
-            <div id="errorMessage" class="error-message">
-                ⚠️ Mot de passe incorrect
+                <div class="login-icon">🛡️</div>
+                <h1 class="login-title">Connexion Sécurisée</h1>
+                <p class="login-subtitle">Accès au tableau de bord des patrouilles</p>
             </div>
 
-            <form id="loginForm" onsubmit="return false;">
-                <div class="form-group">
-                    <label class="form-label" for="password">Mot de passe</label>
-                    <input 
-                        type="password" 
-                        id="password" 
-                        class="form-input" 
-                        placeholder="Entrez votre mot de passe"
-                        required
-                        autocomplete="current-password"
-                    >
-                </div>
-                <button type="submit" class="login-btn" onclick="checkPassword()">
-                    Se connecter
-                </button>
-            </form>
+            <div class="error-message" id="errorMessage">
+                Mot de passe incorrect
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Mot de passe</label>
+                <input type="password" class="form-input" id="password" autofocus>
+            </div>
+
+            <button class="login-btn" onclick="checkPassword()">Se connecter</button>
         </div>
     </div>
 
-    <!-- DASHBOARD (caché par défaut) -->
-    <div id="dashboard" class="dashboard">
+    <!-- DASHBOARD -->
+    <div class="dashboard" id="dashboardPage">
         <div class="container">
             <header>
-                <div class="header-content">
-                    <h1>🚨 Tableau de Bord des Patrouilles</h1>
-                    <p class="subtitle">Suivi en temps réel des interventions et analyses territoriales</p>
+                <div class="header-wrapper">
+                    <div class="header-content">
+                        <h1>📊 Tableau de Bord - Patrouilles</h1>
+                        <p class="subtitle">Surveillance et analyse des secteurs de passage</p>
+                    </div>
+                    <button class="logout-btn" onclick="logout()">🔓 Déconnexion</button>
                 </div>
-                <button class="logout-btn" onclick="logout()">🚪 Déconnexion</button>
             </header>
 
-            <div id="alertBox"></div>
+            <!-- SYSTÈME D'ONGLETS -->
+            <div class="tabs-container">
+                <div class="tabs-header">
+                    <button class="tab-btn active" onclick="switchTab('vue-globale')">📈 Vue Globale</button>
+                    <!-- Les onglets secteurs seront créés dynamiquement ici -->
+                    <button class="tab-btn" onclick="switchTab('donnees')">📋 Données Complètes</button>
+                </div>
 
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-label">Total Patrouilles</div>
-                    <div class="stat-value" id="totalPatrols">0</div>
-                    <div class="stat-change">Dernière mise à jour</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Faits Constatés</div>
-                    <div class="stat-value" id="totalIncidents" style="color: var(--danger);">0</div>
-                    <div class="stat-change">Incidents signalés</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Taux d'Incidents</div>
-                    <div class="stat-value" id="incidentRate" style="color: var(--warning);">0%</div>
-                    <div class="stat-change">Ratio incidents/patrouilles</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Agents Actifs</div>
-                    <div class="stat-value" id="activeAgents" style="color: var(--success);">0</div>
-                    <div class="stat-change">Sur le terrain</div>
-                </div>
-            </div>
+                <!-- ONGLET VUE GLOBALE -->
+                <div class="tab-content active" id="vue-globale">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-label">Total Patrouilles</div>
+                            <div class="stat-value" id="totalPatrols">0</div>
+                        </div>
+                        <div class="stat-card danger">
+                            <div class="stat-label">Total Incidents</div>
+                            <div class="stat-value" id="totalIncidents">0</div>
+                        </div>
+                        <div class="stat-card warning">
+                            <div class="stat-label">Taux d'Incidents</div>
+                            <div class="stat-value" id="incidentRate">0%</div>
+                        </div>
+                        <div class="stat-card success">
+                            <div class="stat-label">Agents Actifs</div>
+                            <div class="stat-value" id="activeAgents">0</div>
+                        </div>
+                    </div>
 
-            <div class="filters">
-                <div class="filter-group">
-                    <label class="filter-label">📅 Date</label>
-                    <input type="date" id="filterDate">
-                </div>
-                <div class="filter-group">
-                    <label class="filter-label">📍 Lieu</label>
-                    <select id="filterLocation">
-                        <option value="">Tous les lieux</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label class="filter-label">⚠️ Statut</label>
-                    <select id="filterStatus">
-                        <option value="">Tous</option>
-                        <option value="oui">Incidents uniquement</option>
-                        <option value="non">Sans incidents</option>
-                    </select>
-                </div>
-                <button class="btn" onclick="resetFilters()">Réinitialiser</button>
-            </div>
+                    <div id="alertBox"></div>
 
-            <div class="chart-container">
-                <div class="chart-title">📊 Faits constatés par lieu</div>
-                <div id="locationChart" class="bar-chart"></div>
-            </div>
+                    <div class="chart-container">
+                        <h3 class="chart-title">📍 Incidents par Lieu</h3>
+                        <div id="locationChart"></div>
+                    </div>
+                </div>
 
-            <div class="data-table">
-                <div id="loading" class="loading">
-                    <div class="spinner"></div>
-                    <p>Chargement des données...</p>
-                </div>
-                <div id="tableContainer" style="display: none;">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Heure</th>
-                                <th>Lieu</th>
-                                <th>Statut</th>
-                                <th>Agent</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tableBody">
-                        </tbody>
-                    </table>
-                </div>
-                <div id="emptyState" class="empty-state" style="display: none;">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    <p>Aucune donnée disponible pour les filtres sélectionnés</p>
+                <!-- Les onglets secteurs seront créés dynamiquement ici -->
+
+                <!-- ONGLET DONNÉES COMPLÈTES -->
+                <div class="tab-content" id="donnees">
+                    <div class="filters">
+                        <div class="filters-grid">
+                            <div class="filter-group">
+                                <label class="filter-label">Date</label>
+                                <input type="date" class="filter-select" id="filterDate">
+                            </div>
+                            <div class="filter-group">
+                                <label class="filter-label">Lieu</label>
+                                <select class="filter-select" id="filterLocation">
+                                    <option value="">Tous les lieux</option>
+                                </select>
+                            </div>
+                            <div class="filter-group">
+                                <label class="filter-label">Statut</label>
+                                <select class="filter-select" id="filterStatus">
+                                    <option value="">Tous</option>
+                                    <option value="oui">Incidents</option>
+                                    <option value="non">RAS</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="filter-actions">
+                            <button class="btn btn-primary" onclick="applyFilters()">🔍 Filtrer</button>
+                            <button class="btn btn-secondary" onclick="resetFilters()">🔄 Réinitialiser</button>
+                        </div>
+                    </div>
+
+                    <div id="loading" class="loading">
+                        <div class="spinner"></div>
+                        <p style="color: var(--text-secondary);">Chargement des données...</p>
+                    </div>
+
+                    <div id="emptyState" class="empty-state">
+                        <div class="empty-state-icon">📭</div>
+                        <h3>Aucune donnée trouvée</h3>
+                        <p>Aucune patrouille ne correspond à vos critères de recherche.</p>
+                    </div>
+
+                    <div id="tableContainer" style="display: none;">
+                        <div class="table-wrapper">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>📅 Date</th>
+                                        <th>🕐 Heure</th>
+                                        <th>📍 Lieu</th>
+                                        <th>⚠️ Statut</th>
+                                        <th>👮 Agent</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -716,6 +902,28 @@
         let allData = [];
         let filteredData = [];
         let isAuthenticated = false;
+        let currentTab = 'vue-globale';
+
+        // ========== SYSTÈME D'ONGLETS ==========
+        function switchTab(tabName) {
+            // Masquer tous les onglets
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Afficher l'onglet sélectionné
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+            currentTab = tabName;
+
+            // Mettre à jour les données pour le secteur
+            if (tabName.startsWith('secteur-')) {
+                updateSectorStats(tabName);
+            }
+        }
 
         // ========== AUTHENTIFICATION ==========
         async function hashPassword(password) {
@@ -735,7 +943,7 @@
             if (hash === PASSWORD_HASH) {
                 isAuthenticated = true;
                 document.getElementById('loginPage').style.display = 'none';
-                document.getElementById('dashboard').classList.add('active');
+                document.getElementById('dashboardPage').classList.add('active');
                 loadData();
             } else {
                 errorMessage.classList.add('show');
@@ -749,7 +957,7 @@
 
         function logout() {
             isAuthenticated = false;
-            document.getElementById('dashboard').classList.remove('active');
+            document.getElementById('dashboardPage').classList.remove('active');
             document.getElementById('loginPage').style.display = 'flex';
             document.getElementById('password').value = '';
         }
@@ -799,6 +1007,7 @@
                     allData = data;
                     filteredData = [...allData];
                     updateDashboard();
+                    updateAllSectors();
                     populateFilters();
                     
                     document.getElementById('loading').style.display = 'none';
@@ -848,7 +1057,6 @@
             document.getElementById('emptyState').style.display = 'none';
             document.getElementById('tableContainer').style.display = 'block';
 
-            // Statistiques
             const totalPatrols = filteredData.length;
             const totalIncidents = filteredData.filter(d => d.fait.toLowerCase() === 'oui').length;
             const incidentRate = totalPatrols > 0 ? ((totalIncidents / totalPatrols) * 100).toFixed(1) : 0;
@@ -859,7 +1067,6 @@
             document.getElementById('incidentRate').textContent = incidentRate + '%';
             document.getElementById('activeAgents').textContent = uniqueAgents;
 
-            // Tableau
             const tbody = document.getElementById('tableBody');
             tbody.innerHTML = filteredData.map(row => `
                 <tr>
@@ -875,14 +1082,10 @@
                 </tr>
             `).join('');
 
-            // Graphique des lieux
             updateLocationChart();
-
-            // Alerte pour les zones prioritaires
             updatePriorityAlert();
         }
 
-        // Graphique des incidents par lieu
         function updateLocationChart() {
             const locationStats = {};
             
@@ -920,7 +1123,6 @@
             document.getElementById('locationChart').innerHTML = chartHTML || '<p style="text-align: center; color: var(--text-secondary);">Aucune donnée disponible</p>';
         }
 
-        // Alerte zones prioritaires
         function updatePriorityAlert() {
             const locationStats = {};
             
@@ -966,7 +1168,185 @@
             }
         }
 
-        // Remplir les filtres
+        // ========== MISE À JOUR DES SECTEURS ==========
+        function updateAllSectors() {
+            // Obtenir tous les lieux uniques des données
+            const allLocations = [...new Set(allData.map(d => d.lieu))].sort();
+            
+            // Créer dynamiquement les onglets secteurs basés sur les lieux
+            createSectorTabs(allLocations);
+            
+            // Mettre à jour les statistiques de chaque secteur
+            allLocations.forEach((location, index) => {
+                updateSectorStats(`secteur-${index}`, location);
+            });
+        }
+
+        function createSectorTabs(locations) {
+            const tabsHeader = document.querySelector('.tabs-header');
+            
+            // Garder seulement les onglets "Vue Globale" et "Données Complètes"
+            const vueGlobaleBtn = tabsHeader.querySelector('.tab-btn');
+            
+            // Supprimer tous les onglets secteurs existants
+            const existingSectorBtns = tabsHeader.querySelectorAll('.tab-btn:not(:first-child):not(:last-child)');
+            existingSectorBtns.forEach(btn => btn.remove());
+            
+            const existingSectorContents = document.querySelectorAll('.tab-content[id^="secteur-"]');
+            existingSectorContents.forEach(content => content.remove());
+            
+            // Créer les nouveaux onglets pour chaque lieu
+            locations.forEach((location, index) => {
+                // Créer le bouton d'onglet
+                const tabBtn = document.createElement('button');
+                tabBtn.className = 'tab-btn';
+                tabBtn.textContent = `📍 ${location}`;
+                tabBtn.onclick = () => switchTab(`secteur-${index}`);
+                
+                // Insérer avant l'onglet "Données Complètes"
+                const donneesBtn = tabsHeader.querySelector('.tab-btn:last-child');
+                tabsHeader.insertBefore(tabBtn, donneesBtn);
+                
+                // Créer le contenu de l'onglet
+                const tabContent = document.createElement('div');
+                tabContent.className = 'tab-content';
+                tabContent.id = `secteur-${index}`;
+                tabContent.innerHTML = `
+                    <div class="stats-grid" id="stats-secteur-${index}"></div>
+                    <div class="chart-container">
+                        <h3 class="chart-title">📊 Répartition des incidents - ${location}</h3>
+                        <div id="chart-secteur-${index}"></div>
+                    </div>
+                    <div class="chart-container">
+                        <h3 class="chart-title">⏰ Répartition Horaire</h3>
+                        <div id="time-chart-secteur-${index}"></div>
+                    </div>
+                `;
+                
+                // Insérer avant l'onglet "Données Complètes"
+                const donneesContent = document.getElementById('donnees');
+                donneesContent.parentNode.insertBefore(tabContent, donneesContent);
+            });
+        }
+
+        function updateSectorStats(sectorId, location) {
+            // Si location n'est pas fourni, le récupérer depuis l'ID
+            if (!location) {
+                const sectorIndex = parseInt(sectorId.split('-')[1]);
+                const allLocations = [...new Set(allData.map(d => d.lieu))].sort();
+                location = allLocations[sectorIndex];
+            }
+            
+            // Filtrer les données pour ce lieu spécifique
+            const sectorData = allData.filter(row => row.lieu === location);
+
+            if (sectorData.length === 0) {
+                document.getElementById(`stats-${sectorId}`).innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--text-secondary);">Aucune donnée pour ce secteur</p>';
+                return;
+            }
+
+            const totalPatrols = sectorData.length;
+            const incidents = sectorData.filter(d => d.fait.toLowerCase() === 'oui').length;
+            const incidentRate = ((incidents / totalPatrols) * 100).toFixed(1);
+            const uniqueAgents = new Set(sectorData.map(d => d.agent).filter(a => a)).size;
+
+            // Stats cards
+            document.getElementById(`stats-${sectorId}`).innerHTML = `
+                <div class="stat-card">
+                    <div class="stat-label">Patrouilles</div>
+                    <div class="stat-value">${totalPatrols}</div>
+                </div>
+                <div class="stat-card danger">
+                    <div class="stat-label">Incidents</div>
+                    <div class="stat-value">${incidents}</div>
+                </div>
+                <div class="stat-card warning">
+                    <div class="stat-label">Taux d'Incidents</div>
+                    <div class="stat-value">${incidentRate}%</div>
+                </div>
+                <div class="stat-card success">
+                    <div class="stat-label">Agents</div>
+                    <div class="stat-value">${uniqueAgents}</div>
+                </div>
+            `;
+
+            // Graphique de statut (RAS vs Incidents)
+            updateSectorStatusChart(sectorId, sectorData);
+
+            // Graphique horaire
+            updateSectorTimeChart(sectorId, sectorData);
+        }
+
+        function updateSectorStatusChart(sectorId, data) {
+            const incidents = data.filter(d => d.fait.toLowerCase() === 'oui').length;
+            const ras = data.length - incidents;
+            const total = data.length;
+
+            const chartHTML = `
+                <div class="bar-item">
+                    <div class="bar-label">RAS (Rien à Signaler)</div>
+                    <div class="bar-wrapper">
+                        <div class="bar-fill" style="width: ${(ras/total)*100}%">
+                            ${ras} patrouille${ras > 1 ? 's' : ''}
+                        </div>
+                    </div>
+                </div>
+                <div class="bar-item">
+                    <div class="bar-label">Incidents signalés</div>
+                    <div class="bar-wrapper">
+                        <div class="bar-fill danger" style="width: ${(incidents/total)*100}%">
+                            ${incidents} incident${incidents > 1 ? 's' : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById(`chart-${sectorId}`).innerHTML = chartHTML;
+        }
+
+        function updateSectorTimeChart(sectorId, data) {
+            const timeStats = {};
+            
+            data.forEach(row => {
+                const hour = row.heure.split(':')[0];
+                if (!timeStats[hour]) {
+                    timeStats[hour] = { total: 0, incidents: 0 };
+                }
+                timeStats[hour].total++;
+                if (row.fait.toLowerCase() === 'oui') {
+                    timeStats[hour].incidents++;
+                }
+            });
+
+            const sortedTimes = Object.entries(timeStats)
+                .sort((a, b) => a[0].localeCompare(b[0]));
+
+            if (sortedTimes.length === 0) {
+                document.getElementById(`time-chart-${sectorId}`).innerHTML = '<p style="text-align: center; color: var(--text-secondary);">Aucune donnée horaire disponible</p>';
+                return;
+            }
+
+            const maxValue = Math.max(...sortedTimes.map(([_, stats]) => stats.total), 1);
+
+            const chartHTML = sortedTimes.map(([hour, stats]) => {
+                const percentage = (stats.total / maxValue) * 100;
+                const hasIncidents = stats.incidents > 0;
+                return `
+                    <div class="bar-item">
+                        <div class="bar-label">${hour}:00 (${stats.incidents} incident${stats.incidents > 1 ? 's' : ''})</div>
+                        <div class="bar-wrapper">
+                            <div class="bar-fill ${hasIncidents ? 'danger' : ''}" style="width: ${percentage}%">
+                                ${stats.total}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById(`time-chart-${sectorId}`).innerHTML = chartHTML;
+        }
+
+        // ========== FILTRES ==========
         function populateFilters() {
             const locations = [...new Set(allData.map(d => d.lieu))].sort();
             const locationSelect = document.getElementById('filterLocation');
@@ -974,7 +1354,6 @@
                 locations.map(loc => `<option value="${loc}">${loc}</option>`).join('');
         }
 
-        // Appliquer les filtres
         function applyFilters() {
             const dateFilter = document.getElementById('filterDate').value;
             const locationFilter = document.getElementById('filterLocation').value;
@@ -990,7 +1369,6 @@
             updateDashboard();
         }
 
-        // Réinitialiser les filtres
         function resetFilters() {
             document.getElementById('filterDate').value = '';
             document.getElementById('filterLocation').value = '';
@@ -999,7 +1377,6 @@
             updateDashboard();
         }
 
-        // Afficher l'état vide
         function showEmptyState() {
             document.getElementById('loading').style.display = 'none';
             document.getElementById('tableContainer').style.display = 'none';
@@ -1011,7 +1388,7 @@
         document.getElementById('filterLocation').addEventListener('change', applyFilters);
         document.getElementById('filterStatus').addEventListener('change', applyFilters);
 
-        // Rafraîchir automatiquement toutes les 30 secondes (seulement si authentifié)
+        // Rafraîchir automatiquement toutes les 30 secondes
         setInterval(() => {
             if (isAuthenticated) {
                 loadData();
