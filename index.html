@@ -1000,12 +1000,12 @@
                 console.log('En-têtes détectés:', headers);
                 
                 // Trouver les index des colonnes importantes
-                const dateIndex = findColumnIndex(headers, ['date', 'jour']);
-                const heureIndex = findColumnIndex(headers, ['heure', 'hour', 'time', 'horaire']);
-                const lieuIndex = findColumnIndex(headers, ['lieu', 'location', 'place', 'secteur', 'zone']);
-                const faitIndex = findColumnIndex(headers, ['fait', 'incident', 'statut', 'status']);
-                const agentIndex = findColumnIndex(headers, ['agent', 'matricule', 'numéro', 'numero', 'number']);
-                const evenementIndex = findColumnIndex(headers, ['quel fait avez-vous constaté', 'constaté', 'événement', 'evenement', 'description', 'fait constaté']);
+                const dateIndex = findColumnIndex(headers, ['date']);
+                const heureIndex = findColumnIndex(headers, ['heure de passage', 'heure']);
+                const lieuIndex = findColumnIndex(headers, ['quel lieu avez-vous sécurisé', 'lieu']);
+                const faitIndex = findColumnIndex(headers, ['avez-vous constaté un fait', 'fait']);
+                const agentIndex = findColumnIndex(headers, ['matricule agent', 'agent', 'n° de main courante']);
+                const evenementIndex = findColumnIndex(headers, ['quel fait avez-vous constaté', 'quel fait avez-vous constaté ?']);
                 
                 console.log('Index trouvés - Date:', dateIndex, 'Heure:', heureIndex, 'Lieu:', lieuIndex, 'Fait:', faitIndex, 'Agent:', agentIndex, 'Événement:', evenementIndex);
                 
@@ -1071,7 +1071,12 @@
         // Fonction pour trouver l'index d'une colonne par son nom
         function findColumnIndex(headers, possibleNames) {
             for (let name of possibleNames) {
-                const index = headers.findIndex(h => h.includes(name));
+                const index = headers.findIndex(h => {
+                    // Nettoyer les espaces et caractères spéciaux pour la comparaison
+                    const cleanHeader = h.replace(/\s+/g, ' ').trim().toLowerCase();
+                    const cleanName = name.replace(/\s+/g, ' ').trim().toLowerCase();
+                    return cleanHeader.includes(cleanName) || cleanName.includes(cleanHeader);
+                });
                 if (index !== -1) return index;
             }
             return -1;
